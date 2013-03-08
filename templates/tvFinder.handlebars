@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>TVFinder</title>
-    <link href="css/TVFinder.css" type="text/css" rel="stylesheet"/>
+    <link href="../TVFinder/css/TVFinder.css" type="text/css" rel="stylesheet"/>
     <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -54,16 +54,18 @@
     </ul>
 </section>
 <!-- gradient separator -->
-<section>
-    <article>
-        <ul>
-            <li><a href="#" title=""><!-- product image --></a></li>
-            <li><a href="#" title=""><!-- product name --></a></li>
-            <li><!-- product details --></li>
-            <li><!-- product price --></li>
-            <li><!-- product rating summary --></li>
-        </ul>
+<section id="tvFinderContainer" class="clearfix">
+    {{#items}}
+    <article data-type="{{type}}" data-brand="{{brand}}" data-price="{{price}}" data-name="{{name}}" data-rating="{{rating}}" data-size="{{size}}">
+        <header>
+            <h1 class="tvFinderProduct"><a href="#" title=""><img class="tvFinderProductImage" src="http://i.walmartimages.com/i/p/00/79/23/43/23/0079234323252_180X180.jpg"
+                                                                  alt=""/>lorem lorem lorem</a></h1>
+        </header>
+        <p class="tvFinderProductDetails"><ul></ul></p>
+        <p class="tvFinderProductPrice"><span class="tvFinderUsDollars">$XX</span><span class="tvFinderUsCents">.xx</span></p>
+        <p class="tvFinderProductRating"><!-- product rating summary --></p>
     </article>
+    {{/items}}
 </section>
 <footer>
     <!-- e-mail signup -->
@@ -78,5 +80,7 @@
         </ul>
     </nav>
 </footer>
+<script src="js/jquery.js"></script>
+<script src="../TVFinder/js/jquery.isotope.js"></script>
 </body>
 </html>

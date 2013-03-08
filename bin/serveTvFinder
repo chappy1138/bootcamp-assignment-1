@@ -1,0 +1,124 @@
+#!/usr/bin/env node
+
+var fs = require('fs')
+    , http = require('http')
+    , Handlebars = require('handlebars')
+    , Q = require('q')
+    ;
+
+var searchHost = 'sdc-vsearcher-e3.walmart.com'
+    , searchPath = '/search?query=tvs&result_type=all&cat_id=0&facet_predict=off&cat=on&facet=on&facet.limit=-1&facet.sort=index&rows=100&start=0&&debug=error&response_group=medium'
+    , tvFinderTemplate = '../templates/tvFinder.handlebars'
+    ;
+
+Q.all([ populateTelevisions(searchHost, searchPath), compileTemplate(tvFinderTemplate) ])
+    .then(generateTvFinderHtml)
+    .then(serveTvFinder)
+    .fail(function (error) {
+        console.error(error);
+    });
+
+function populateTelevisions(searchHost, searchPath) {
+    var deferred = Q.defer();
+    http.request({
+            host: searchHost,
+            path: searchPath
+        }
+        ,function (response) {
+            var json = '';
+            response.on('data', function (chunk) {
+                json += chunk;
+            });
+            response.on('end', function () {
+                var result = JSON.parse(json)
+                    , items = result.response.items
+                    , televisions = []
+                    , brandMap = {
+                        'VIZIO': 'Vizio', 'SANYO': 'Sanyo', 'SCEPTRE': 'Sceptre', 'HANNspree': 'Hannspree'
+                    }
+                    , index
+                    ;
+                for (index = 0; index < items.length; index++) {
+                    var item = items[index]
+                        , listPrice = parseFloat((item.prices.base_suggested || item.prices.base).amount)
+                        , price = parseFloat(item.prices.current.amount)
+                        , sizeInches = item.title.match(/[0-9]*"/)
+                        , size = sizeInches ? parseInt(sizeInches[0].match(/^[^"]*/)[0]) : 40
+                        , brandValue = item.title.match(/^[^ ]*/)[0]
+                        , brand = brandMap[brandValue] || brandValue
+                        , type = (item.title.match(/(LED-LCD)|(LED)|(LCD)|(Plasma)|(DLP)/) || ["LCD"])[0]
+                        , rating = item.customer_rating ? parseFloat(item.customer_rating) : 0
+                        ;
+                    televisions.push({
+                        url: item.url,
+                        name: item.title,
+                        size: size,
+                        listPrice: listPrice,
+                        price: price,
+                        image: item.images[0].url,
+                        description: item.shelf_description,
+                        type: type,
+                        brand: brand,
+                        rating: rating
+                    });
+                }
+                deferred.resolve(televisions);
+            });
+        }).end();
+    return deferred.promise;
+}
+
+function compileTemplate(templatePath) {
+    var deferred = Q.defer();
+    fs.readFile(templatePath, 'ascii', function (err, contents) {
+            if (!err) {
+                deferred.resolve(Handlebars.compile(contents));
+            }
+            else {
+                deferred.reject(new Error(err));
+            }
+        }
+    );
+    return deferred.promise;
+}
+
+function generateTvFinderHtml(results) {
+    var deferred = Q.defer(), televisions = results[0], template = results[1];
+    deferred.resolve(template({ items: televisions }));
+    return deferred.promise;
+}
+
+function serveTvFinder(html) {
+    var pathMap = [
+            { pattern: /^.*\/css\/(.*)$/, action: function (values) {
+                return { type: 'text/css', content: "<!-- " + values[1] + " -->\n" };
+            } }
+            ,
+            { pattern: /^.*\/js\/(.*)$/, action: function (values) {
+                return { type: 'application/javascript', content: "// " + values[1] + "\n" };
+            } }
+            ,
+            { pattern: /^\/$/, action: function () {
+                return { type: 'text/html', content: html };
+            } }
+        ]
+        , index
+        , values
+        , result
+        ;
+    http.createServer(function (req, res) {
+            for (index = 0; index < pathMap.length; index++) {
+                values = req.url.match(pathMap[index].pattern);
+                if (values) {
+                    result = pathMap[index].action(values);
+                    res.writeHead(200, {'Content-Type': result.type });
+                    res.end(result.content);
+                    return;
+                }
+            }
+            res.writeHead(404, {'Content-Type': 'text/plain' });
+            res.end('not found');
+        }
+    ).listen(8000, '127.0.0.1');
+    console.log('started server on port 8000');
+}
