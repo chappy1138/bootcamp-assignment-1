@@ -13,29 +13,47 @@
  ]
  }
  */
-var http = require('http');
+var http = require('http')
+    , brandMap = {
+        'VIZIO': 'Vizio', 'SANYO': 'Sanyo', 'SCEPTRE': 'Sceptre', 'HANNspree': 'Hannspree'
+    }
+    ;
 
 http.request({
-    host:'sdc-vsearcher-e3.walmart.com',
-    path:'/search?query=tvs&result_type=all&cat_id=0&facet_predict=off&cat=on&facet=on&facet.limit=-1&facet.sort=index&rows=100&start=0&&debug=error&response_group=medium'
+    host: 'sdc-vsearcher-e3.walmart.com',
+    path: '/search?query=tvs&result_type=all&cat_id=0&facet_predict=off&cat=on&facet=on&facet.limit=-1&facet.sort=index&rows=100&start=0&&debug=error&response_group=medium'
 },function (response) {
     var json = '';
-    response.on('data', function (chunk) { json += chunk; });
+    response.on('data', function (chunk) {
+        json += chunk;
+    });
     response.on('end', function () {
-        var result = JSON.parse(json), items = result.response.items, televisions = new Array();
-        for (var index in items) {
-            var item = items[index], listPrice = item.prices.base_suggested || item.prices.base, size = item.title.match(/[0-9]*"/);
+        var result = JSON.parse(json), items = result.response.items, televisions = [];
+        for (var index = 0; index < items.length; index++) {
+            var item = items[index]
+                , listPrice = parseFloat((item.prices.base_suggested || item.prices.base).amount)
+                , price = parseFloat(item.prices.current.amount)
+                , sizeInches = item.title.match(/[0-9]*"/)
+                , size = sizeInches ? parseInt(sizeInches[0].match(/^[^"]*/)[0]) : 40
+                , brandValue = item.title.match(/^[^ ]*/)[0]
+                , brand = brandMap[brandValue] || brandValue
+                , type = (item.title.match(/(LED-LCD)|(LED)|(LCD)|(Plasma)|(DLP)/) || ["LCD"])[0]
+                , rating = item.customer_rating ? parseFloat(item.customer_rating) : 0
+                ;
             televisions.push({
                 url: item.url,
                 name: item.title,
-                size: size ? parseInt(size[0].match(/[0-9]*/)[0]) : 40,
-                listPrice: parseFloat(listPrice.amount),
-                price: parseFloat(item.prices.current.amount),
+                size: size,
+                listPrice: listPrice,
+                price: price,
                 image: item.images[0].url,
                 description: item.shelf_description,
-                rating: item.customer_rating ? parseFloat(item.customer_rating) : 0
+                type: type,
+                brand: brand,
+                rating: rating
             });
         }
+        //console.log(televisions); // pretty
         console.log(JSON.stringify(televisions));
     });
 }).end();
