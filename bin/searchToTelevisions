@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+
+/*
+ {
+ "televisions:" : [
+ {
+ "name": "Toshiba 32C120U 32-Inch 720p 60Hz LCD HDTV (Black)",
+ "size": 32,
+ "listPrice": 379.99,
+ "price": 229.95,
+ "image": "tv1.png"
+ }
+ ]
+ }
+ */
+var http = require('http');
+
+http.request({
+    host:'sdc-vsearcher-e3.walmart.com',
+    path:'/search?query=tvs&result_type=all&cat_id=0&facet_predict=off&cat=on&facet=on&facet.limit=-1&facet.sort=index&rows=100&start=0&&debug=error&response_group=medium'
+},function (response) {
+    var json = '';
+    response.on('data', function (chunk) { json += chunk; });
+    response.on('end', function () {
+        var result = JSON.parse(json), items = result.response.items, televisions = new Array();
+        for (var index in items) {
+            var item = items[index], listPrice = item.prices.base_suggested || item.prices.base, size = item.title.match(/[0-9]*"/);
+            televisions.push({
+                url: item.url,
+                name: item.title,
+                size: size ? parseInt(size[0].match(/[0-9]*/)[0]) : 40,
+                listPrice: parseFloat(listPrice.amount),
+                price: parseFloat(item.prices.current.amount),
+                image: item.images[0].url,
+                description: item.shelf_description,
+                rating: item.customer_rating ? parseFloat(item.customer_rating) : 0
+            });
+        }
+        console.log(JSON.stringify(televisions));
+    });
+}).end();
