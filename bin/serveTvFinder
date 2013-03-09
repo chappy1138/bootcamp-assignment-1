@@ -6,20 +6,122 @@ var fs = require('fs')
     , Q = require('q')
     ;
 
-var searchHost = 'sdc-vsearcher-e3.walmart.com'
+var port = 8000
+    , address = '127.0.0.1'
+    , searchHost = 'sdc-vsearcher-e3.walmart.com'
     , searchPath = '/search?query=tvs&result_type=all&cat_id=0&facet_predict=off&cat=on&facet=on&facet.limit=-1&facet.sort=index&rows=100&start=0&&debug=error&response_group=medium'
-    , tvFinderTemplate = '../templates/tvFinder.handlebars'
+    , tvFinderTemplate = 'templates/tvFinder.handlebars'
+    , televisions = []
     ;
 
-Q.all([ populateTelevisions(searchHost, searchPath), compileTemplate(tvFinderTemplate) ])
-    .then(generateTvFinderHtml)
-    .then(serveTvFinder)
-    .fail(function (error) {
-        console.error(error);
-    });
+populateTelevisions(searchHost, searchPath).then(serveTvFinder);
+
+function serveTvFinder() {
+    var pathMap = [
+            { pattern: /^\/(css\/.*\.css)$/, action: serveCss }
+            , { pattern: /^\/(js\/.*\.js)$/, action: serveJavascript }
+            , { pattern: /^\/(i\/.*\.png)$/, action: servePng }
+            , { pattern: /^\/$/, action: serveTvFinderHtml }
+        ]
+        , index
+        , values
+        , result
+        ;
+    http.createServer(function (req, res) {
+            for (index = 0; index < pathMap.length; index++) {
+                values = req.url.match(pathMap[index].pattern);
+                if (values) {
+                    pathMap[index].action(values, req, res).fail(
+                        function (err) {
+                            if (err.code === 'ENOENT') {
+                                notFound(req, res);
+                            }
+                            else {
+                                console.error(req.url, err);
+                                res.writeHead(500, {'Content-Type': 'text/plain' });
+                                res.end('server error: ' + err.code + ': ' + err.errno);
+                            }
+                        }
+                    );
+                    return;
+                }
+            }
+            notFound(req, res);
+        }
+    ).listen(port, address);
+    console.log('started server ' + address + ' on port ' + port);
+}
+
+function notFound(req, res) {
+    res.writeHead(404, {'Content-Type': 'text/plain' });
+    res.end('not found');
+}
+
+function serveCss(values, req, res) {
+    var deferred = Q.defer();
+    fs.readFile(values[1], 'ascii', function (err, contents) {
+            if (!err) {
+                res.writeHead(200, { 'Content-Type': 'text/css' });
+                res.end(contents);
+                deferred.resolve();
+            }
+            else {
+                deferred.reject(err);
+            }
+        }
+    );
+    return deferred.promise;
+}
+
+function serveJavascript(values, req, res) {
+    var deferred = Q.defer();
+    fs.readFile(values[1], 'ascii', function (err, contents) {
+            if (!err) {
+                res.writeHead(200, { 'Content-Type': 'application/javascript' });
+                res.end(contents);
+                deferred.resolve();
+            }
+            else {
+                deferred.reject(err);
+            }
+        }
+    );
+    return deferred.promise;
+}
+
+function servePng(values, req, res) {
+    var deferred = Q.defer();
+    fs.readFile(values[1], function (err, contents) {
+            if (!err) {
+                res.writeHead(200, { 'Content-Type': 'image/png' });
+                res.end(contents);
+                deferred.resolve();
+            }
+            else {
+                deferred.reject(err);
+            }
+        }
+    );
+    return deferred.promise;
+}
+
+function serveTvFinderHtml (values, req, res) {
+    var deferred = Q.defer();
+    compileTemplate(tvFinderTemplate)
+        .then(generateTvFinderHtml)
+        .then(function (contents) {
+            res.writeHead(200, { 'Content-Type': 'text/html' });
+            res.end(contents);
+            deferred.resolve();
+        })
+        .fail(function (err) {
+            deferred.reject(err);
+        });
+    return deferred.promise;
+}
 
 function populateTelevisions(searchHost, searchPath) {
-    var deferred = Q.defer();
+    var deferred = Q.defer(), startTime = new Date();
     http.request({
             host: searchHost,
             path: searchPath
@@ -30,9 +132,9 @@ function populateTelevisions(searchHost, searchPath) {
                 json += chunk;
             });
             response.on('end', function () {
-                var result = JSON.parse(json)
+                var elapsed = (new Date()) - startTime
+                    , result = JSON.parse(json)
                     , items = result.response.items
-                    , televisions = []
                     , brandMap = {
                         'VIZIO': 'Vizio', 'SANYO': 'Sanyo', 'SCEPTRE': 'Sceptre', 'HANNspree': 'Hannspree'
                     }
@@ -42,6 +144,9 @@ function populateTelevisions(searchHost, searchPath) {
                     var item = items[index]
                         , listPrice = parseFloat((item.prices.base_suggested || item.prices.base).amount)
                         , price = parseFloat(item.prices.current.amount)
+                        , amount = price.toFixed(2)
+                        , dollars = '$' + amount.match(/[^.]*/)[0]
+                        , cents = amount.match(/\..*/)[0]
                         , sizeInches = item.title.match(/[0-9]*"/)
                         , size = sizeInches ? parseInt(sizeInches[0].match(/^[^"]*/)[0]) : 40
                         , brandValue = item.title.match(/^[^ ]*/)[0]
@@ -59,10 +164,12 @@ function populateTelevisions(searchHost, searchPath) {
                         description: item.shelf_description,
                         type: type,
                         brand: brand,
-                        rating: rating
+                        rating: rating,
+                        dollars: dollars,
+                        cents: cents
                     });
                 }
-                deferred.resolve(televisions);
+                deferred.resolve();
             });
         }).end();
     return deferred.promise;
@@ -82,43 +189,8 @@ function compileTemplate(templatePath) {
     return deferred.promise;
 }
 
-function generateTvFinderHtml(results) {
-    var deferred = Q.defer(), televisions = results[0], template = results[1];
+function generateTvFinderHtml(template) {
+    var deferred = Q.defer();
     deferred.resolve(template({ items: televisions }));
     return deferred.promise;
-}
-
-function serveTvFinder(html) {
-    var pathMap = [
-            { pattern: /^.*\/css\/(.*)$/, action: function (values) {
-                return { type: 'text/css', content: "<!-- " + values[1] + " -->\n" };
-            } }
-            ,
-            { pattern: /^.*\/js\/(.*)$/, action: function (values) {
-                return { type: 'application/javascript', content: "// " + values[1] + "\n" };
-            } }
-            ,
-            { pattern: /^\/$/, action: function () {
-                return { type: 'text/html', content: html };
-            } }
-        ]
-        , index
-        , values
-        , result
-        ;
-    http.createServer(function (req, res) {
-            for (index = 0; index < pathMap.length; index++) {
-                values = req.url.match(pathMap[index].pattern);
-                if (values) {
-                    result = pathMap[index].action(values);
-                    res.writeHead(200, {'Content-Type': result.type });
-                    res.end(result.content);
-                    return;
-                }
-            }
-            res.writeHead(404, {'Content-Type': 'text/plain' });
-            res.end('not found');
-        }
-    ).listen(8000, '127.0.0.1');
-    console.log('started server on port 8000');
 }
