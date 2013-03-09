@@ -1,19 +1,93 @@
 .tvFinderSprite {
-    background: url(../i/sprite.png) no-repeat;
-}
-
-#logo {
-    background-position: -10px -20px;
-    height: 20px;
-    widthe: 40px;
+    background: url(../i/tvFinderSprite.png) no-repeat;
 }
 
 #tvFinderTopNav {
+}
 
+#tvFinderWalmartNav {
+    position: relative;
+}
+
+#tvFinderWalmartNav li {
+    position: absolute;
+    top: 0;
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+
+#tvFinderWalmartNav li, #tvFinderWalmartNav a {
+    height: 59px;
+    display: block;
+}
+
+#walmartLogo {
+    width: 201px;
+}
+
+#walmartSearch {
+    left:250px;
+    width:250px;
+}
+
+#walmartLinks {
+    left:500px;
+    width:250px;
+}
+
+#walmartLinkList {
+    position: relative;
+    margin:0;
+}
+
+#walmartLinkList li {
+    position: absolute;
+    top: 0;
+    padding:0;
+    list-style: none;
+}
+
+#walmartLinkList li, #walmartLinkList a {
+    height: 59px;
+    display: block;
+}
+
+#walmartCreate {
+    left: 0;
+    width: 100px;
+}
+
+#walmartSignIn {
+    left: 150px;
+    width: 100px;
+}
+
+#walmartCart {
+    left: 300px;
+    width: 100px;
+}
+
+#tvFinderBreadcrumb {
+    position: relative;
+}
+
+#tvFinderBreadcrumb li {
+    position: absolute;
+    top: 60px;
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+
+#tvFinderBreadcrumb li, #tvFinderBreadcrumb a {
+    height: 59px;
+    display: block;
 }
 
 #tvFinderLogo {
-
+    left: 0;
+    width: 201px;
 }
 
 .tvFinderProductImage {
