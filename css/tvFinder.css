@@ -1,3 +1,7 @@
+/*****************
+ * TVFinder Fonts
+ *
+ */
 @font-face {
     font-family: "MyriadPro-Regular";
     src: url('../font/MyriadPro-Regular.otf');
@@ -8,6 +12,10 @@
     src: url('../font/MyriadPro-Light.otf');
 }
 
+/*****************
+ * TVFinder Styling
+ *
+ */
 body, article, section, header, footer, nav, ul {
     padding: 0;
     margin: 0;
@@ -39,12 +47,19 @@ a {
     margin-right: auto;
 }
 
+/*******************
+ * TVFinder Top of Page Navigation
+ *
+ */
 .tvFinderTopNav {
     background: url(../i/walmartHeaderBackground.png) no-repeat;
     width: 1024px;
     background-size: 1024px 90px;
 }
 
+/*
+ * Walmart Logo
+ */
 .tvFinderWalmartNav {
     width: 1024px;
     height: 100px;
@@ -61,6 +76,9 @@ a {
     text-indent: -9999px;
 }
 
+/*
+ * Search Bar
+ */
 .walmartSearchCell {
     width: 360px;
     height: 85px;
@@ -107,6 +125,9 @@ a {
     color: rgb(210,210,210);
 }
 
+/*
+ * Three Amigos: Create [Wishlist], Sign In, Cart
+ */
 .walmartCreateCell
 , .walmartSignInCell
 , .walmartCartCell {
@@ -135,6 +156,8 @@ a {
     color:rgb(83,90,95);
     top: 26px;
     text-indent: 28px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .walmartCartLink {
@@ -154,7 +177,9 @@ a {
     text-indent: 16px;
 }
 
-
+/*
+ * Horizontal Breadcrumb
+ */
 .tvFinderBreadcrumbLine {
     width: 1024px;
     height: 30px;
@@ -188,6 +213,17 @@ a {
     font-weight: bold;
 }
 
+/*
+ * End of top of page navigation
+ */
+
+/************************
+ * TVFinder Header
+ *
+ * - Title
+ * - Description
+ * - Minimum, Median and Maximum TV Size offers
+ */
 .tvFinderHeader {
     line-height: 90px;
     font-size: 56px;
@@ -216,6 +252,13 @@ a {
     height: 218px;
 }
 
+/*
+ * TVFinder Controls:
+ * - size range slider
+ * - type filter dropdown
+ * - brand filter dropdown
+ * - sort dropdown
+ */
 .tvFinderControls {
     background: url(../i/tvFinderControls.png) no-repeat;
     background-position:center;
@@ -241,6 +284,7 @@ a {
     margin: 20px 0 0 0;
 }
 
+/* TODO: convert to gradient */
 #tvFinderSizeSlider .ui-rangeSlider-bar {
     background-color: rgb(255,177,70);
 }
@@ -274,4 +318,8 @@ a {
 .tvFinderControls .tvFinderControl {
     display: block;
     margin-top: 10px;
+}
+
+.tvFinderOffer {
+
 }
