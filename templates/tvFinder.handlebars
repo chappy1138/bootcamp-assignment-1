@@ -3,6 +3,7 @@
 <head>
     <title>TVFinder</title>
     <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+    <link href="css/jQRangeSlider-classic-min.css" type="text/css" rel="stylesheet"/>
     <link href="css/tvFinder.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
@@ -39,7 +40,8 @@
         <div class="tvFinderOffers"></div>
         <ul class="tvFinderControls">
             <li><a class="tvFinderLogoLink" href="#" title="Go to the TV Finder">TV Finder</a></li>
-            <li class="tvFinderSizePrompt">Size</li>
+            <li class="tvFinderSizePrompt">Size
+                <div id="tvFinderSizeSlider" class="tvFinderControl"></div></li>
             <li class="tvFinderTypePrompt">Type
                 <div class="btn-group tvFinderControl">
                     <a class="btn btn-large dropdown-toggle" data-toggle="dropdown" href="#">
@@ -115,9 +117,12 @@
         </nav>
     </footer>
 </article>
-<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/jquery-1.7.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="js/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="js/jQRangeSlider-min.js"></script>
 <script src="js/jquery.isotope.min.js"></script>
+<script>$("#tvFinderSizeSlider").rangeSlider({arrows:false,bounds:{min:{{minSize}},max:{{maxSize}} },defaultValues:{min:{{minSize}},max:{{maxSize}} }});</script>
 <script src="js/tvFinder.js"></script>
 </body>
 </html>
