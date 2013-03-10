@@ -10,7 +10,7 @@ var port = 8000
     , address = '127.0.0.1'
     , searchHost = 'sdc-vsearcher-e3.walmart.com'
     , searchPath = '/search?query=tvs&result_type=all&cat_id=0&facet_predict=off&cat=on&facet=on&facet.limit=-1&facet.sort=index&rows=100&start=0&&debug=error&response_group=medium'
-    , tvFinderTemplate = 'templates/tvFinder.handlebars'
+    , tvFinderTemplate = 'templates/tvFinder.hbs'
     , televisions = {}
     ;
 
