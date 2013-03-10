@@ -21,6 +21,7 @@ function serveTvFinder() {
             { pattern: /^\/(css\/.*\.css)$/, action: serveCss }
             , { pattern: /^\/(js\/.*\.js)$/, action: serveJavascript }
             , { pattern: /^\/(i\/.*\.png)$/, action: servePng }
+            , { pattern: /^\/(font\/.*\.otf)$/, action: serveFont }
             , { pattern: /^\/$/, action: serveTvFinderHtml }
         ]
         , index
@@ -94,6 +95,22 @@ function servePng(values, req, res) {
     fs.readFile(values[1], function (err, contents) {
             if (!err) {
                 res.writeHead(200, { 'Content-Type': 'image/png' });
+                res.end(contents);
+                deferred.resolve();
+            }
+            else {
+                deferred.reject(err);
+            }
+        }
+    );
+    return deferred.promise;
+}
+
+function serveFont(values, req, res) {
+    var deferred = Q.defer();
+    fs.readFile(values[1], function (err, contents) {
+            if (!err) {
+                res.writeHead(200, { 'Content-Type': 'font/opentype' });
                 res.end(contents);
                 deferred.resolve();
             }
