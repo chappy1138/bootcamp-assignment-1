@@ -99,19 +99,21 @@
             </li>
         </ul>
     </header>
-    <section id="tvFinderOfferContainer" class="clearfix">
+    <section id="tvFinderOfferContainerId" class="tvFinderOfferContainer">
         {{#items}}
             <article class="tvFinderOffer" data-type="{{type}}" data-brand="{{brand}}" data-price="{{price}}"
                      data-name="{{name}}"
                      data-rating="{{rating}}" data-size="{{size}}">
                 <header>
-                    <h1 class="tvFinderProduct"><a href="{{url}}" title=""><img class="tvFinderProductImage"
-                                                                                src="{{image}}"
-                                                                                alt="{{name}}"/>{{name}}</a></h1>
+                    <h1 class="tvFinderProduct"><a class="tvFinderProductLink" href="{{url}}" title="{{name}}">
+                        <i class="tvFinderProductImage"
+                           data-img
+                           data-src="{{image}}"
+                           data-alt="{{name}}"></i>
+                        <div class="tvFinderProductName">{{name}}</div>
+                    </a></h1>
                 </header>
-                <p class="tvFinderProductDetails">
-                <ul>{{{description}}}</ul>
-                </p>
+                <ul class="tvFinderProductDetails">{{{description}}}</ul>
                 <p class="tvFinderProductPrice"><span class="tvFinderUsDollars">{{dollars}}</span><span
                         class="tvFinderUsCents">{{cents}}</span></p>
 
@@ -137,6 +139,8 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="js/jQRangeSlider-min.js"></script>
+<script src="js/jquery.viewed.js"></script>
+<script src="js/jquery.deferredimage.js"></script>
 <script src="js/jquery.isotope.min.js"></script>
 <script>
     !function ($) {
@@ -150,7 +154,7 @@
             defaultValues: range
         });
     }
-    (window.jQuery);
+            (window.jQuery);
 </script>
 <script src="js/tvFinder.js"></script>
 </body>
