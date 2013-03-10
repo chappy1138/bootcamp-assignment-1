@@ -329,12 +329,14 @@ a {
  * - Rating Summary
  */
 .tvFinderOfferContainer {
+    clear: both;
     display: block;
 }
 
 .tvFinderOffer {
     width: 224px;
     display: inline-block;
+    padding: 10px;
 }
 
 .tvFinderProduct {
