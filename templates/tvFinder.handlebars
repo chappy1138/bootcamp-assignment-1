@@ -33,13 +33,9 @@
         </ul>
     </nav>
     <header>
-        <h1>Get More, For Less</h1>
-        <strong>Find the perfect Television with our new <a href="#" title="TVFinder">TVFinder&trade;</a></strong>
-        <ul><!-- tvs in the range -->
-            <li><a href="#" title="small"></a></li>
-            <li><a href="#" title="medium"></a></li>
-            <li><a href="#" title="large"></a></li>
-        </ul>
+        <h1 class="tvFinderHeader">Get More, For Less</h1>
+        <h2 class="tvFinderDescription">Find the perfect Television with our new <a class="tvFinderLink" href="#" title="TVFinder">TVFinder&trade;</a></h2>
+        <div class="tvFinderOffers"></div>
         <ul>
             <li><a id="tvFinderLogo" href="#" title="TV Finder"></a></li>
             <li><!-- range widget --></li>
@@ -49,7 +45,7 @@
         </ul>
     </header>
     <!-- gradient separator -->
-    <section id="tvFinderContainer" class="clearfix">
+    <section id="tvFinderOfferContainer" class="clearfix">
         {{#items}}
         <article class="tvFinderOffer" data-type="{{type}}" data-brand="{{brand}}" data-price="{{price}}"
                  data-name="{{name}}"
