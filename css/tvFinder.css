@@ -72,13 +72,17 @@ a {
     cursor: pointer;
 }
 
-.walmartSearchInput {
-    background-color:transparent;
-    font-size: 14px;
+.walmartSearchCell .walmartSearchInput {
+    background-color: transparent;
     width: 185px;
     border: none;
+    box-shadow: none;
     font-size: larger;
     color: rgb(83,90,95);
+}
+
+.walmartSearchCell .walmartSearchInput:focus {
+    box-shadow: none;
 }
 
 .walmartSearchInput::-webkit-input-placeholder { /* WebKit browsers */
@@ -181,7 +185,7 @@ a {
     font-weight: normal;
     color:rgb(58,58,58);
     text-align: center;
-    margin: 0px;
+    margin: 0;
 }
 
 .tvFinderDescription {
@@ -208,6 +212,7 @@ a {
     background-position:center;
     width: 980px;
     height: 144px;
+    font-size: large;
 }
 
 .tvFinderLogoLink {
@@ -238,3 +243,13 @@ a {
     width: 100px;
 }
 
+.tvFinderMenuChoice {
+    display: block;
+    float: none;
+    margin: 0 0 0 10px;
+}
+
+.tvFinderControls .tvFinderControl {
+    display: block;
+    margin-top: 10px;
+}

@@ -11,7 +11,7 @@ var port = 8000
     , searchHost = 'sdc-vsearcher-e3.walmart.com'
     , searchPath = '/search?query=tvs&result_type=all&cat_id=0&facet_predict=off&cat=on&facet=on&facet.limit=-1&facet.sort=index&rows=100&start=0&&debug=error&response_group=medium'
     , tvFinderTemplate = 'templates/tvFinder.handlebars'
-    , televisions = []
+    , televisions = {}
     ;
 
 populateTelevisions(searchHost, searchPath).then(serveTvFinder);
@@ -138,8 +138,14 @@ function populateTelevisions(searchHost, searchPath) {
                     , brandMap = {
                         'VIZIO': 'Vizio', 'SANYO': 'Sanyo', 'SCEPTRE': 'Sceptre', 'HANNspree': 'Hannspree'
                     }
+                    , tvs = []
+                    , brands = {}
+                    , types = {}
                     , index
+                    , medianIndex
+                    , medianItem
                     ;
+                televisions.items = [];
                 for (index = 0; index < items.length; index++) {
                     var item = items[index]
                         , listPrice = parseFloat((item.prices.base_suggested || item.prices.base).amount)
@@ -153,22 +159,45 @@ function populateTelevisions(searchHost, searchPath) {
                         , brand = brandMap[brandValue] || brandValue
                         , type = (item.title.match(/(LED-LCD)|(LED)|(LCD)|(Plasma)|(DLP)/) || ["LCD"])[0]
                         , rating = item.customer_rating ? parseFloat(item.customer_rating) : 0
+                        , tv = {
+                            url: item.url,
+                            name: item.title,
+                            size: size,
+                            listPrice: listPrice,
+                            price: price,
+                            image: item.images[0].url,
+                            description: item.shelf_description,
+                            type: type,
+                            brand: brand,
+                            rating: rating,
+                            dollars: dollars,
+                            cents: cents
+                        }
                         ;
-                    televisions.push({
-                        url: item.url,
-                        name: item.title,
-                        size: size,
-                        listPrice: listPrice,
-                        price: price,
-                        image: item.images[0].url,
-                        description: item.shelf_description,
-                        type: type,
-                        brand: brand,
-                        rating: rating,
-                        dollars: dollars,
-                        cents: cents
-                    });
+                    brands[brand] = true;
+                    types[type] = true;
+                    televisions.items.push(tv);
+                    televisions.minSize = Math.min(televisions.minSize || size, size);
+                    televisions.maxSize = Math.max(televisions.maxSize || size, size);
+                    televisions.minPrice = Math.min(televisions.minPrice || price, price);
+                    televisions.maxPrice = Math.max(televisions.maxPrice || price, price);
                 }
+                tvs = televisions.items.slice(0); // clone the array
+                tvs.sort(function(a, b) { return a.size - b.size });
+                medianIndex = Math.floor(tvs.length/2);
+                medianItem = tvs[medianIndex];
+                televisions.medianSize = medianItem.size;
+                televisions.medianSizePrice = medianItem.price;
+                televisions.brands = [];
+                for (var brand in brands) {
+                    televisions.brands.push(brand);
+                }
+                televisions.brands.sort();
+                televisions.types = [];
+                for (var type in types) {
+                    televisions.types.push(type);
+                }
+                televisions.types.sort();
                 deferred.resolve();
             });
         }).end();
@@ -191,6 +220,6 @@ function compileTemplate(templatePath) {
 
 function generateTvFinderHtml(template) {
     var deferred = Q.defer();
-    deferred.resolve(template({ items: televisions }));
+    deferred.resolve(template(televisions));
     return deferred.promise;
 }
