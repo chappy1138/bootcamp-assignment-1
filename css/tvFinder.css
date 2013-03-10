@@ -5,12 +5,6 @@ body, article, section, header, footer, nav, ul {
     font-family: "Arial", Helvetica, sans-serif;
 }
 
-.tvFinderContent {
-    width: 1024px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
 nav {
 }
 
@@ -30,15 +24,21 @@ a {
     text-decoration: none;
 }
 
+.tvFinderContent {
+    width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .tvFinderTopNav {
     background: url(../i/walmartHeaderBackground.png) no-repeat;
     width: 1024px;
-    height: 90px;
+    background-size: 1024px 90px;
 }
 
 .tvFinderWalmartNav {
     width: 1024px;
-    height: 85px;
+    height: 100px;
 }
 
 .walmartLogoCell
@@ -66,6 +66,7 @@ a {
 .walmartSearchSubmit {
     background-color:transparent;
     width: 32px;
+    height: 28px;
     text-indent: -9999px;
     border: none;
     cursor: pointer;
@@ -138,4 +139,39 @@ a {
 
 .walmartCartText {
     text-indent: 16px;
+}
+
+
+.tvFinderBreadcrumbLine {
+    width: 1024px;
+    height: 30px;
+    line-height: 20px;
+    text-transform: uppercase;
+    font-size: small;
+}
+
+.tvFinderHomeBreadcrumb {
+    background: url(../i/walmartBreadcrumbSprite.png) no-repeat;
+    width: 28px;
+    height: 28px;
+    margin-left: 20px;
+}
+
+.tvFinderHomeLink {
+    width: 28px;
+    display: block;
+    text-indent: -9999px;
+}
+
+.tvFinderBreadcrumb {
+    background: url(../i/walmartBreadcrumbSprite.png) no-repeat -28px 0;
+}
+
+.tvFinderBreadcrumbLink {
+    display: block;
+    margin-left: 24px;
+    margin-right: 8px;
+    color:rgb(14,121,190);
+    font-weight: bold;
+;
 }
