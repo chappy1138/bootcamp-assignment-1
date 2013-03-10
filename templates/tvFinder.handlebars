@@ -36,15 +36,14 @@
         <h1 class="tvFinderHeader">Get More, For Less</h1>
         <h2 class="tvFinderDescription">Find the perfect Television with our new <a class="tvFinderLink" href="#" title="TVFinder">TVFinder&trade;</a></h2>
         <div class="tvFinderOffers"></div>
-        <ul>
-            <li><a id="tvFinderLogo" href="#" title="TV Finder"></a></li>
-            <li><!-- range widget --></li>
-            <li>Type</li>
-            <li>Brand</li>
-            <li>Sort</li>
+        <ul class="tvFinderControls">
+            <li><a class="tvFinderLogoLink" href="#" title="Go to the TV Finder">TV Finder</a></li>
+            <li class="tvFinderSizePrompt">Size</li>
+            <li class="tvFinderTypePrompt">Type</li>
+            <li class="tvFinderBrandPrompt">Brand</li>
+            <li class="tvFinderSortPrompt">Sort</li>
         </ul>
     </header>
-    <!-- gradient separator -->
     <section id="tvFinderOfferContainer" class="clearfix">
         {{#items}}
         <article class="tvFinderOffer" data-type="{{type}}" data-brand="{{brand}}" data-price="{{price}}"
