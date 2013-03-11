@@ -100,6 +100,11 @@
             </li>
         </ul>
     </header>
+    <header class="tvFinderOfferHeader">
+        <span id="tvFinderMatchOfferCountId" class="tvFinderMatchOfferCount">{{items.length}} Matches</span>
+        <span>for televisions fitting that criteria</span>
+        <button id="tvFinderClearFiltersId" class="btn tvFinderClearFilters">Clear Filters</button>
+    </header>
     <section id="tvFinderOfferContainerId" class="tvFinderOfferContainer">
         {{#items}}
             <article class="tvFinderOffer" data-Featured="{{@index}}" data-Type="{{type}}" data-Brand="{{brand}}" data-Price="{{price}}"
@@ -123,17 +128,6 @@
         {{/items}}
     </section>
     <footer>
-        <!-- e-mail signup -->
-        <nav>
-            <ul>
-                <li>
-                    <!-- column 1 -->
-                    <ul>
-                        <li></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
     </footer>
 </article>
 <script src="js/jquery-1.7.1.min.js"></script>

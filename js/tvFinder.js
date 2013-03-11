@@ -24,10 +24,22 @@
             .find(".dropdown-menu")
         , $dropdownFilters = $dropdowns
             .filter("[data-role=filter]")
+        , $matchOfferCount = $("#tvFinderMatchOfferCountId")
         , sizeBounds
         , minSize
         , maxSize
         ;
+    $("#tvFinderClearFiltersId").click(function () {
+        $dropdownFilters.each(function () {
+            $(this)
+                .prev()
+                .contents()
+                .eq(0)
+                .replaceWith('Any ');
+        });
+        $sizeSlider.rangeSlider("values", sizeBounds.min, sizeBounds.max);
+        dropdownFilterUpdate(undefined);
+    });
     sizeBounds = $sizeSlider.rangeSlider("bounds");
     minSize = sizeBounds.min;
     maxSize = sizeBounds.max;
@@ -143,6 +155,13 @@
         selector += '[data-in-size-range=true]';
         $tvs.isotope({ filter: selector }, function ($items) {
             // update messaging
+            $matchOfferCount.text($items.length);
+            if ($items.length === 1) {
+                $matchOfferCount.text("1 match");
+            }
+            else {
+                $matchOfferCount.text($items.length + " matches");
+            }
         });
     }
 }(window.jQuery);
