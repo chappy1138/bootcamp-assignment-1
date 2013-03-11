@@ -18,10 +18,6 @@
             })
         , $sizeSlider = $("#tvFinderSizeSlider")
             .on("valuesChanged", sizeFilterUpdate)
-        , $sizeSliderLeftHandle = $sizeSlider.data("minMaxRangeSlider").leftHandle
-        , sizeSliderLeftHandle = $sizeSliderLeftHandle.data("minMaxRangeSliderHandle")
-        , $sizeSliderRightHandle = $sizeSlider.data("minMaxRangeSlider").rightHandle
-        , sizeSliderRightHandle = $sizeSliderRightHandle.data("minMaxRangeSliderHandle")
         , $dropdowns = $('.dropdown-toggle')
             .dropdown()
             .parent()
@@ -32,7 +28,7 @@
         , minSize
         , maxSize
         ;
-    sizeBounds = $sizeSlider.minMaxRangeSlider("bounds");
+    sizeBounds = $sizeSlider.rangeSlider("bounds");
     minSize = sizeBounds.min;
     maxSize = sizeBounds.max;
     // add event handler to the filter anchors
@@ -147,15 +143,6 @@
         selector += '[data-in-size-range=true]';
         $tvs.isotope({ filter: selector }, function ($items) {
             // update messaging
-            var range = {};
-            $items.each(function () {
-                var value = getSize(this);
-                range.min = Math.min(range.min || value, value);
-                range.max = Math.max(range.max || value, value);
-            })
-            ;
-            sizeSliderLeftHandle.options.bounds.max = range.max;
-            sizeSliderRightHandle.options.bounds.min = range.min;
         });
     }
 }(window.jQuery);

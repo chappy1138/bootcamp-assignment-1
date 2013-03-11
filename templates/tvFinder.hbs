@@ -140,8 +140,6 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="js/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="js/jQRangeSlider-min.js"></script>
-<script src="js/jquery.ui.minMaxRangeSlider.js"></script>
-<script src="js/jquery.ui.minMaxRangeSliderHandle.js"></script>
 <script src="js/jquery.viewed.js"></script>
 <script src="js/jquery.deferredimage.js"></script>
 <script src="js/jquery.isotope.min.js"></script>
@@ -151,7 +149,7 @@
                 , maxSize = {{maxSize}}
                 , range = { min: minSize, max: maxSize }
                 ;
-        $("#tvFinderSizeSlider").minMaxRangeSlider({
+        $("#tvFinderSizeSlider").rangeSlider({
             arrows: false
             , bounds: range
             , defaultValues: range
