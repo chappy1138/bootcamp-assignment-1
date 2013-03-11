@@ -296,12 +296,12 @@ a {
 
 .tvFinderTypePrompt {
     margin: 30px 0 0 10px;
-    width: 100px;
+    width: 130px;
 }
 
 .tvFinderBrandPrompt {
     margin: 30px 0 0 10px;
-    width: 190px;
+    width: 170px;
 }
 
 .tvFinderSortPrompt {
@@ -404,19 +404,20 @@ a {
 
 .tvFinderProductPrice {
     display: block;
-    padding-top: 10px;
+    margin-top: 40px;
     color: rgb(40,42,43);
-    font-weight: bold;
+    font-weight: normal;
+    font-family: "MyriadPro-Regular", Helvetica, sans-serif;    font-weight: bold;
 }
 
 .tvFinderUsDollars {
     font-size: 32px;
-    vertical-align: top;
 }
 
 .tvFinderUsCents {
     font-size: 16px;
     vertical-align: top;
+    line-height: 6px;
 }
 
 /**** Isotope Filtering ****/
