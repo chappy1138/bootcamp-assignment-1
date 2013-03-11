@@ -16,13 +16,26 @@
                     }
                 }
             })
+        , $sizeSlider = $("#tvFinderSizeSlider")
+            .on("valuesChanged", sizeFilterUpdate)
+        , $sizeSliderLeftHandle = $sizeSlider.data("minMaxRangeSlider").leftHandle
+        , sizeSliderLeftHandle = $sizeSliderLeftHandle.data("minMaxRangeSliderHandle")
+        , $sizeSliderRightHandle = $sizeSlider.data("minMaxRangeSlider").rightHandle
+        , sizeSliderRightHandle = $sizeSliderRightHandle.data("minMaxRangeSliderHandle")
         , $dropdowns = $('.dropdown-toggle')
             .dropdown()
             .parent()
             .find(".dropdown-menu")
         , $dropdownFilters = $dropdowns
             .filter("[data-role=filter]")
+        , sizeBounds
+        , minSize
+        , maxSize
         ;
+    sizeBounds = $sizeSlider.minMaxRangeSlider("bounds");
+    minSize = sizeBounds.min;
+    maxSize = sizeBounds.max;
+    // add event handler to the filter anchors
     $dropdowns
         .find("a")
         .click(function (event) {
@@ -41,65 +54,7 @@
                 .replaceWith(value + ' ')
             ;
             if (role === 'filter') {
-                var selector = '.tvFinderOffer', filterValues = {};
-                $dropdownFilters
-                    .each(function () {
-                        var $this = $(this)
-                            , attr = $this.attr("data-attr")
-                            ;
-                        $this
-                            .prev()
-                            .contents()
-                            .eq(0)
-                            .each(function () {
-                                var $this = $(this)
-                                    , value = $this.text().trim()
-                                    ;
-                                if (value !== 'Any') {
-                                    filterValues[attr] = value;
-                                    selector += '[data-' + attr + '=' + value + ']';
-                                }
-                            })
-                        ;
-
-                    })
-                    .each(function () {
-                        if (this != $parent[0]) {
-                            var $this = $(this)
-                                , attr = $this.attr("data-attr")
-                                , selector = '.tvFinderOffer'
-                                ;
-                            for (var filter in filterValues) {
-                                if (filter !== attr) {
-                                    selector += '[data-' + filter + '=' + filterValues[filter] + ']';
-                                }
-                            }
-                            $this.find('a').each(function () {
-                                var $a = $(this)
-                                    , value = $a.text().trim()
-                                    , thisSelector
-                                    , thisFilteredList
-                                    ;
-                                if (value !== 'Any') {
-                                    thisSelector = selector + '[data-' + attr + '=' + value + ']';
-                                    thisFilteredList = $tvs.find(thisSelector);
-                                    if (thisFilteredList.length > 0) {
-                                        $a.parent().removeClass('disabled');
-                                    }
-                                    else {
-                                        $a.parent().addClass('disabled');
-                                    }
-                                }
-                            })
-                        }
-                    })
-                ;
-
-                $tvs.isotope({ filter: selector }, function ($items) {
-                    var id = this.attr('id'),
-                        len = $items.length;
-                    console.log('Isotope has filtered for ' + len + ' items in #' + id);
-                });
+                dropdownFilterUpdate($parent);
             }
             else {
                 $tvs.isotope({ sortBy: value, sortAscending: $this.attr("data-asc") === 'true' });
@@ -107,4 +62,100 @@
             return false;
         })
     ;
+
+    function sizeFilterUpdate(e, data) {
+        minSize = data.values.min;
+        maxSize = data.values.max;
+        dropdownFilterUpdate(undefined);
+    }
+
+    function getSize(el) {
+        return parseInt(el.getAttribute('data-Size'));
+    }
+
+    function isInSizeRange(el) {
+        var value = getSize(el);
+        return minSize <= value && value <= maxSize;
+    }
+
+    function dropdownFilterUpdate($parent) {
+        var selector = '.tvFinderOffer'
+            , filterValues = {}
+            ;
+
+        // disable/enable filter choices based on new setting
+        $dropdownFilters
+            .each(function () {
+                var $this = $(this)
+                    , attr = $this.attr("data-attr")
+                    ;
+                $this
+                    .prev()
+                    .contents()
+                    .eq(0)
+                    .each(function () {
+                        var $this = $(this)
+                            , value = $this.text().trim()
+                            ;
+                        if (value !== 'Any') {
+                            filterValues[attr] = value;
+                            selector += '[data-' + attr + '=' + value + ']';
+                        }
+                    })
+                ;
+
+            })
+            .each(function () {
+                if (!$parent || this != $parent[0]) {
+                    var $this = $(this)
+                        , attr = $this.attr("data-attr")
+                        , selector = '.tvFinderOffer'
+                        ;
+                    for (var filter in filterValues) {
+                        if (filter !== attr) {
+                            selector += '[data-' + filter + '=' + filterValues[filter] + ']';
+                        }
+                    }
+                    $this.find('a').each(function () {
+                        var $a = $(this)
+                            , value = $a.text().trim()
+                            , thisSelector
+                            , thisFilteredList
+                            ;
+                        if (value !== 'Any') {
+                            thisSelector = selector + '[data-' + attr + '=' + value + ']';
+                            thisFilteredList = $tvs.find(thisSelector)
+                                .filter(function () {
+                                    return isInSizeRange(this);
+                                })
+                            ;
+                            if (thisFilteredList.length > 0) {
+                                $a.parent().removeClass('disabled');
+                            }
+                            else {
+                                $a.parent().addClass('disabled');
+                            }
+                        }
+                    })
+                }
+            })
+        ;
+
+        $tvs.find('.tvFinderOffer').each(function () {
+            this.setAttribute('data-in-size-range', isInSizeRange(this));
+        });
+        selector += '[data-in-size-range=true]';
+        $tvs.isotope({ filter: selector }, function ($items) {
+            // update messaging
+            var range = {};
+            $items.each(function () {
+                var value = getSize(this);
+                range.min = Math.min(range.min || value, value);
+                range.max = Math.max(range.max || value, value);
+            })
+            ;
+            sizeSliderLeftHandle.options.bounds.max = range.max;
+            sizeSliderRightHandle.options.bounds.min = range.min;
+        });
+    }
 }(window.jQuery);
