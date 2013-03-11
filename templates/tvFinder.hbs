@@ -61,7 +61,7 @@
                         Any
                         <span class="caret"></span>
                     </a>
-                    <ul class="dropdown-menu" data-role="filter" data-attr="type">
+                    <ul class="dropdown-menu" data-role="filter" data-attr="Type">
                         <li class="tvFinderMenuChoice"><a href="#">Any</a></li>
                         {{#types}}
                             <li class="tvFinderMenuChoice"><a href="#">{{.}}</a></li>
@@ -75,7 +75,7 @@
                         Any
                         <span class="caret"></span>
                     </a>
-                    <ul class="dropdown-menu" data-role="filter" data-attr="brand">
+                    <ul class="dropdown-menu" data-role="filter" data-attr="Brand">
                         <li class="tvFinderMenuChoice"><a href="#">Any</a></li>
                         {{#brands}}
                             <li class="tvFinderMenuChoice"><a href="#">{{.}}</a></li>
@@ -90,10 +90,11 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu" data-role="sort">
-                        <li class="tvFinderMenuChoice"><a href="#">Price</a></li>
-                        <li class="tvFinderMenuChoice"><a href="#">Rating</a></li>
-                        <li class="tvFinderMenuChoice"><a href="#">Name</a></li>
-                        <li class="tvFinderMenuChoice"><a href="#">Size</a></li>
+                        <li class="tvFinderMenuChoice"><a href="#" data-asc="true">Featured</a></li>
+                        <li class="tvFinderMenuChoice"><a href="#" data-asc="true">Price</a></li>
+                        <li class="tvFinderMenuChoice"><a href="#" data-asc="false">Rating</a></li>
+                        <li class="tvFinderMenuChoice"><a href="#" data-asc="true">Name</a></li>
+                        <li class="tvFinderMenuChoice"><a href="#" data-asc="true">Size</a></li>
                     </ul>
                 </div>
             </li>
@@ -101,9 +102,9 @@
     </header>
     <section id="tvFinderOfferContainerId" class="tvFinderOfferContainer">
         {{#items}}
-            <article class="tvFinderOffer" data-type="{{type}}" data-brand="{{brand}}" data-price="{{price}}"
-                     data-name="{{name}}"
-                     data-rating="{{rating}}" data-size="{{size}}">
+            <article class="tvFinderOffer" data-Featured="{{@index}}" data-Type="{{type}}" data-Brand="{{brand}}" data-Price="{{price}}"
+                     data-Name="{{name}}"
+                     data-Rating="{{rating}}" data-Size="{{size}}">
                 <header>
                     <h1 class="tvFinderProduct"><a class="tvFinderProductLink" href="{{url}}" title="{{name}}">
                         <i class="tvFinderProductImage"
