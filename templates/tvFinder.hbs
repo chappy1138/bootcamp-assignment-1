@@ -99,15 +99,16 @@
                 </div>
             </li>
         </ul>
-    </header>
-    <header class="tvFinderOfferHeader">
-        <span id="tvFinderMatchOfferCountId" class="tvFinderMatchOfferCount">{{items.length}} Matches</span>
-        <span>for televisions fitting that criteria</span>
-        <button id="tvFinderClearFiltersId" class="btn tvFinderClearFilters">Clear Filters</button>
+        <header class="tvFinderOfferHeader">
+            <span id="tvFinderMatchOfferCountId" class="tvFinderMatchOfferCount">{{items.length}} Matches</span>
+            <span>for televisions fitting that criteria</span>
+            <button id="tvFinderClearFiltersId" class="btn tvFinderClearFilters">Clear Filters</button>
+        </header>
     </header>
     <section id="tvFinderOfferContainerId" class="tvFinderOfferContainer">
         {{#items}}
-            <article class="tvFinderOffer" data-Featured="{{@index}}" data-Type="{{type}}" data-Brand="{{brand}}" data-Price="{{price}}"
+            <article class="tvFinderOffer" data-Featured="{{@index}}" data-Type="{{type}}" data-Brand="{{brand}}"
+                     data-Price="{{price}}"
                      data-Name="{{name}}"
                      data-Rating="{{rating}}" data-Size="{{size}}">
                 <header>
@@ -116,14 +117,18 @@
                            data-img
                            data-src="{{image}}"
                            data-alt="{{name}}"></i>
-                        <div class="tvFinderProductName">{{name}}</div>
+
+                        <div class="tvFinderProductName">{{{name}}}</div>
                     </a></h1>
                 </header>
                 <ul class="tvFinderProductDetails">{{{description}}}</ul>
                 <p class="tvFinderProductPrice"><span class="tvFinderUsDollars">{{dollars}}</span><span
                         class="tvFinderUsCents">{{cents}}</span></p>
 
-                <p class="tvFinderProductRating">{{rating}}</p>
+                <p class="tvFinderProductRating">
+                    <span class="tvFinderProductRatingSummary" style="width: {{ratingWidth}}px"
+                          title="{{ratingDisplay}} out of 5 Stars"></span>
+                </p>
             </article>
         {{/items}}
     </section>
@@ -144,10 +149,7 @@
                 , range = { min: minSize, max: maxSize }
                 ;
         $("#tvFinderSizeSlider").rangeSlider({
-            arrows: false
-            , bounds: range
-            , defaultValues: range
-            , formatter: function (val) {
+            arrows: false, bounds: range, defaultValues: range, formatter: function (val) {
                 return '' + Math.round(val) + '"';
             }
         });

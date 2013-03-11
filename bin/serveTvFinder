@@ -165,14 +165,14 @@ function populateTelevisions(searchHost, searchPath) {
                 televisions.items = [];
                 for (index = 0; index < items.length; index++) {
                     var item = items[index]
-                        , listPrice = parseFloat((item.prices.base_suggested || item.prices.base).amount)
-                        , price = parseFloat(item.prices.current.amount)
+                        , listPrice = item.prices ? parseFloat((item.prices.base_suggested || item.prices.base || item.prices.current).amount) : 0
+                        , price = item.prices ? parseFloat(item.prices.current.amount) : 0
                         , amount = price.toFixed(2)
-                        , dollars = '$' + amount.match(/[^.]*/)[0]
-                        , cents = amount.match(/\..*/)[0]
+                        , dollars = item.prices ? '$' + amount.match(/[^.]*/)[0] : ""
+                        , cents = item.prices ? amount.match(/\..*/)[0] : ""
                         , sizeInches = item.title.match(/[0-9]*"/)
                         , size = sizeInches ? parseInt(sizeInches[0].match(/^[^"]*/)[0]) : 40
-                        , brandValue = item.title.match(/^[^ ]*/)[0]
+                        , brandValue = item.brand || item.title.match(/^[^ ]*/)[0]
                         , brand = brandMap[brandValue] || brandValue
                         , type = (item.title.match(/(LED-LCD)|(LED)|(LCD)|(Plasma)|(DLP)/) || ["LCD"])[0]
                         , rating = item.customer_rating ? parseFloat(item.customer_rating) : 0
@@ -183,10 +183,12 @@ function populateTelevisions(searchHost, searchPath) {
                             listPrice: listPrice,
                             price: price,
                             image: item.images[0].url,
-                            description: item.shelf_description,
+                            description: item.shelf_description.match(/^</) ? item.shelf_description : item.shelf_description.match(/<li>.*/)[0],
                             type: type,
                             brand: brand,
                             rating: rating,
+                            ratingWidth: Math.round(rating * 12.0),
+                            ratingDisplay: Math.round(rating) == rating ? rating : rating.toFixed(1),
                             dollars: dollars,
                             cents: cents
                         }

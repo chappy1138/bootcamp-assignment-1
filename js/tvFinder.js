@@ -12,7 +12,7 @@
                     }, Name: function ($elem) {
                         return $elem.attr('data-Name');
                     }, Size: function ($elem) {
-                        return $elem.attr('data-Size');
+                        return parseInt($elem.attr('data-Size'));
                     }
                 }
             })
@@ -107,7 +107,7 @@
                             ;
                         if (value !== 'Any') {
                             filterValues[attr] = value;
-                            selector += '[data-' + attr + '=' + value + ']';
+                            selector += '[data-' + attr + '="' + value + '"]';
                         }
                     })
                 ;
@@ -121,7 +121,7 @@
                         ;
                     for (var filter in filterValues) {
                         if (filter !== attr) {
-                            selector += '[data-' + filter + '=' + filterValues[filter] + ']';
+                            selector += '[data-' + filter + '="' + filterValues[filter] + '"]';
                         }
                     }
                     $this.find('a').each(function () {
@@ -131,7 +131,7 @@
                             , thisFilteredList
                             ;
                         if (value !== 'Any') {
-                            thisSelector = selector + '[data-' + attr + '=' + value + ']';
+                            thisSelector = selector + '[data-' + attr + '="' + value + '"]';
                             thisFilteredList = $tvs.find(thisSelector)
                                 .filter(function () {
                                     return isInSizeRange(this);
