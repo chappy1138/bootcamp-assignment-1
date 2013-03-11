@@ -17,7 +17,7 @@
                 }
             })
         , $sizeSlider = $("#tvFinderSizeSlider")
-            .on("valuesChanged", sizeFilterUpdate)
+            .slider({ change: sizeFilterUpdate })
         , $dropdowns = $('.dropdown-toggle')
             .dropdown()
             .parent()
@@ -37,12 +37,12 @@
                 .eq(0)
                 .replaceWith('Any ');
         });
-        $sizeSlider.rangeSlider("values", sizeBounds.min, sizeBounds.max);
+        $sizeSlider.slider("values", sizeBounds);
         dropdownFilterUpdate(undefined);
     });
-    sizeBounds = $sizeSlider.rangeSlider("bounds");
-    minSize = sizeBounds.min;
-    maxSize = sizeBounds.max;
+    sizeBounds = $sizeSlider.slider("values");
+    minSize = sizeBounds[0];
+    maxSize = sizeBounds[1];
     // add event handler to the filter anchors
     $dropdowns
         .find("a")
@@ -71,9 +71,10 @@
         })
     ;
 
-    function sizeFilterUpdate(e, data) {
-        minSize = data.values.min;
-        maxSize = data.values.max;
+    function sizeFilterUpdate(e, ui) {
+        console.log(ui, ui.values);
+        minSize = ui.values[0];
+        maxSize = ui.values[1];
         dropdownFilterUpdate(undefined);
     }
 
@@ -154,6 +155,15 @@
         });
         selector += '[data-in-size-range=true]';
         $tvs.isotope({ filter: selector }, function ($items) {
+            // update size lowMax and topMin
+            var lowMax, topMin;
+            $items.each(function () {
+                var value = getSize(this);
+                topMin = Math.min(topMin || value, value);
+                lowMax = Math.max(lowMax || value, value);
+            });
+            $sizeSlider.slider("option", "topMin", topMin);
+            $sizeSlider.slider("option", "lowMax", lowMax);
             // update messaging
             $matchOfferCount.text($items.length);
             if ($items.length === 1) {

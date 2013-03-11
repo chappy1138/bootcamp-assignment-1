@@ -3,7 +3,7 @@
 <head>
     <title>TVFinder</title>
     <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
-    <link href="css/jQRangeSlider-classic-min.css" type="text/css" rel="stylesheet"/>
+    <link href="css/jquery-ui-1.10.1.custom.min.css" type="text/css" rel="stylesheet"/>
     <link href="css/tvFinder.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
@@ -136,23 +136,30 @@
     </footer>
 </article>
 <script src="js/jquery-1.7.1.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="js/jQRangeSlider-min.js"></script>
 <script src="js/jquery.viewed.js"></script>
 <script src="js/jquery.deferredimage.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery-ui-1.10.1.custom.min.js"></script>
+<script src="js/jquery.ui.slider.js"></script>
 <script src="js/jquery.isotope.min.js"></script>
 <script>
     !function ($) {
-        var minSize = {{minSize}}
-                , maxSize = {{maxSize}}
-                , range = { min: minSize, max: maxSize }
-                ;
-        $("#tvFinderSizeSlider").rangeSlider({
-            arrows: false, bounds: range, defaultValues: range, formatter: function (val) {
-                return '' + Math.round(val) + '"';
+        $("#tvFinderSizeSlider").slider({
+            animate: "fast",
+            range: true,
+            min: {{minSize}},
+            max: {{maxSize}},
+            minRangeSize: 1,
+            maxRangeSize: {{maxSize}} - {{minSize}},
+            lowMax: {{maxSize}},
+            topMin: {{minSize}},
+            autoShift: true,
+            values: [{{minSize}}, {{maxSize}}],
+            slide: function (evt, ui) {
+                console.log(ui.values[0] + " - " + ui.values[1]);
             }
-        });
+        })
+        ;
     }
             (window.jQuery);
 </script>

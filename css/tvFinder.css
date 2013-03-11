@@ -280,22 +280,24 @@ a:hover {
 }
 
 .tvFinderSizePrompt {
-    margin: 30px 62px 0 2px;
-    width: 325px;
+    margin: 30px 60px 0 0;
+    width: 312px;
 }
 
 #tvFinderSizeSlider {
-    margin: 20px 0 0 0;
-}
-
-/* TODO: convert to gradient */
-#tvFinderSizeSlider .ui-rangeSlider-bar {
-    background-color: rgb(255,177,70);
-}
-
-#tvFinderSizeSlider .ui-rangeSlider-innerBar
-, #tvFinderSizeSlider .ui-rangeSlider-bar {
+    margin: 20px -12px 0 10px;
     height: 11px;
+}
+
+#tvFinderSizeSlider .ui-slider-range {
+    background: url(../i/rangeGradient.png) repeat-x;
+}
+
+#tvFinderSizeSlider .ui-slider-handle {
+    background: url(../i/sliderHandle.png) no-repeat;
+    height: 29px;
+    width: 15px;
+    top: -10px;
 }
 
 .tvFinderTypePrompt {
