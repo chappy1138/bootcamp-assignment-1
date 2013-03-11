@@ -150,9 +150,12 @@
                 , range = { min: minSize, max: maxSize }
                 ;
         $("#tvFinderSizeSlider").rangeSlider({
-            arrows: false,
-            bounds: range,
-            defaultValues: range
+            arrows: false
+            , bounds: range
+            , defaultValues: range
+            , formatter: function (val) {
+                return '' + Math.round(val) + '"';
+            }
         });
     }
             (window.jQuery);
