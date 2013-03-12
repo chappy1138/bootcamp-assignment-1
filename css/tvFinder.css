@@ -39,10 +39,17 @@ form {
 
 a {
     text-decoration: none;
+    outline: 0;
 }
 
 a:hover {
     text-decoration: none;
+    outline: 0;
+}
+
+a:focus {
+    text-decoration: none;
+    outline: 0;
 }
 
 .tvFinderContent {
@@ -251,9 +258,9 @@ a:hover {
 
 .tvFinderOffers {
     background: url(../i/tvFinderOffers.png) no-repeat;
-    background-position:center;
+    background-position:top;
     width: 1024px;
-    height: 218px;
+    height: 248px;
 }
 
 /*
@@ -289,15 +296,31 @@ a:hover {
     height: 11px;
 }
 
+.tvFinderSizeSliderLabel {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    top: 10px;
+    width: 60px;
+    text-decoration: none;
+    color: rgb(58,58,58);
+    font-weight: bold;
+}
+
+#tvFinderSizeSlider .ui-state-focus {
+    text-decoration: none;
+}
+
 #tvFinderSizeSlider .ui-slider-range {
     background: url(../i/rangeGradient.png) repeat-x;
 }
 
 #tvFinderSizeSlider .ui-slider-handle {
-    background: url(../i/sliderHandle.png) no-repeat;
-    height: 29px;
-    width: 15px;
-    top: -10px;
+    background: url(../i/transparentSliderHandleWithLabel.png) no-repeat;
+    height: 83px;
+    width: 61px;
+    top: -62px;
+    margin-left: -30px;
 }
 
 .tvFinderTypePrompt {
@@ -416,7 +439,6 @@ a:hover {
     margin-top: 38px;
     color: rgb(40,42,43);
     font-weight: bold;
-    font-family: "MyriadPro-Light", Helvetica, sans-serif;    font-weight: bold;
 }
 
 .tvFinderUsDollars {

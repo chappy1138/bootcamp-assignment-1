@@ -29,6 +29,9 @@
         , minSize
         , maxSize
         ;
+
+    // Clear Filters Button
+
     $("#tvFinderClearFiltersId").click(function () {
         $dropdownFilters.each(function () {
             $(this)
@@ -37,13 +40,50 @@
                 .eq(0)
                 .replaceWith('Any ');
         });
-        $sizeSlider.slider("values", sizeBounds);
+        $sizeSlider
+            .slider("values", sizeBounds)
+            .find('.tvFinderSizeSliderLabel').each(function (index) {
+                $(this).html(sizeSliderLabel(sizeBounds[index]));
+            })
+        ;
         dropdownFilterUpdate(undefined);
     });
+
+    // Size Range Slider
+
     sizeBounds = $sizeSlider.slider("values");
     minSize = sizeBounds[0];
     maxSize = sizeBounds[1];
-    // add event handler to the filter anchors
+
+    $sizeSlider.find('.ui-slider-handle').each(function (index) {
+        $(this).append('<span class="tvFinderSizeSliderLabel">' + sizeSliderLabel(sizeBounds[index]) + '</span>');
+    });
+
+    $sizeSlider.slider("option", "slide", function (evt, ui) {
+        $(ui.handle).find('.tvFinderSizeSliderLabel').html(sizeSliderLabel(ui.value));
+    });
+
+    function sizeSliderLabel(value) {
+        return Math.round(value) + '&rdquo;'
+    }
+
+    function sizeFilterUpdate(e, ui) {
+        minSize = ui.values[0];
+        maxSize = ui.values[1];
+        dropdownFilterUpdate(undefined);
+    }
+
+    function getSize(el) {
+        return parseInt(el.getAttribute('data-Size'));
+    }
+
+    function isInSizeRange(el) {
+        var value = getSize(el);
+        return minSize <= value && value <= maxSize;
+    }
+
+    // Other Filters
+
     $dropdowns
         .find("a")
         .click(function (event) {
@@ -70,22 +110,6 @@
             return false;
         })
     ;
-
-    function sizeFilterUpdate(e, ui) {
-        console.log(ui, ui.values);
-        minSize = ui.values[0];
-        maxSize = ui.values[1];
-        dropdownFilterUpdate(undefined);
-    }
-
-    function getSize(el) {
-        return parseInt(el.getAttribute('data-Size'));
-    }
-
-    function isInSizeRange(el) {
-        var value = getSize(el);
-        return minSize <= value && value <= maxSize;
-    }
 
     function dropdownFilterUpdate($parent) {
         var selector = '.tvFinderOffer'
