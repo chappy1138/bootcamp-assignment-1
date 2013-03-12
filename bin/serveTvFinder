@@ -196,17 +196,29 @@ function populateTelevisions(searchHost, searchPath) {
                     brands[brand] = true;
                     types[type] = true;
                     televisions.items.push(tv);
-                    televisions.minSize = Math.min(televisions.minSize || size, size);
-                    televisions.maxSize = Math.max(televisions.maxSize || size, size);
-                    televisions.minPrice = Math.min(televisions.minPrice || price, price);
-                    televisions.maxPrice = Math.max(televisions.maxPrice || price, price);
+                    if ((televisions.minPrice || price) >= price) {
+                        televisions.minPrice = price;
+                        televisions.minPriceSize = size;
+                    }
+                    if ((televisions.maxPrice || price) <= price) {
+                        televisions.maxPrice = price;
+                        televisions.maxPriceSize = size;
+                    }
+                    televisions.minSize = Math.min(size, televisions.minSize || size);
+                    televisions.maxSize = Math.max(size, televisions.maxSize || size);
                 }
                 tvs = televisions.items.slice(0); // clone the array
-                tvs.sort(function(a, b) { return a.size - b.size });
+                tvs.sort(function(a, b) { return a.price - b.price });
                 medianIndex = Math.floor(tvs.length/2);
                 medianItem = tvs[medianIndex];
-                televisions.medianSize = medianItem.size;
-                televisions.medianSizePrice = medianItem.price;
+                televisions.medianPrice = medianItem.price;
+                televisions.medianPriceSize = medianItem.size;
+                televisions.minPriceDollars = '$' + televisions.minPrice.toFixed(2).match(/[^.]*/)[0];
+                televisions.minPriceCents = televisions.minPrice.toFixed(2).match(/\..*/)[0]
+                televisions.medianPriceDollars = '$' + televisions.medianPrice.toFixed(2).match(/[^.]*/)[0]
+                televisions.medianPriceCents = televisions.medianPrice.toFixed(2).match(/\..*/)[0]
+                televisions.maxPriceDollars = '$' + televisions.maxPrice.toFixed(2).match(/[^.]*/)[0]
+                televisions.maxPriceCents = televisions.maxPrice.toFixed(2).match(/\..*/)[0]
                 televisions.brands = [];
                 for (var brand in brands) {
                     televisions.brands.push(brand);

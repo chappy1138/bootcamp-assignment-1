@@ -91,6 +91,7 @@ a:focus {
  * Search Bar
  */
 .walmartSearchCell {
+    position: relative;
     width: 360px;
     height: 85px;
 }
@@ -98,7 +99,7 @@ a:focus {
 .walmartSearchForm {
     position: absolute;
     top: 30px;
-    left: 332px;
+    left: 13px;
 }
 
 .walmartSearchSubmit {
@@ -261,6 +262,84 @@ a:focus {
     background-position:top;
     width: 1024px;
     height: 248px;
+    position: relative;
+    color: rgb(255,255,255);
+}
+
+.tvFinderMinPrice {
+    position: absolute;
+    top: 132px;
+    left: 180px;
+}
+
+.tvFinderMedianPrice {
+    position: absolute;
+    top: 110px;
+    left: 415px;
+}
+
+.tvFinderMaxPrice {
+    position: absolute;
+    top: 86px;
+    left: 707px;
+}
+
+.tvFinderMinSize
+, .tvFinderMedianSize
+, .tvFinderMaxSize {
+    position: absolute;
+    font-weight: bold;
+}
+
+.tvFinderMinSize {
+
+    /* Safari */
+    -webkit-transform: rotate(52deg);
+
+    /* Firefox */
+    -moz-transform: rotate(52deg);
+
+    /* IE */
+    -ms-transform: rotate(52deg);
+
+    /* Opera */
+    -o-transform: rotate(52deg);
+    top: 93px;
+    left: 278px;
+}
+
+.tvFinderMedianSize {
+
+    /* Safari */
+    -webkit-transform: rotate(45deg);
+
+    /* Firefox */
+    -moz-transform: rotate(45deg);
+
+    /* IE */
+    -ms-transform: rotate(45deg);
+
+    /* Opera */
+    -o-transform: rotate(45deg);
+    top: 59px;
+    left: 541px;
+}
+
+.tvFinderMaxSize {
+
+    /* Safari */
+    -webkit-transform: rotate(45deg);
+
+    /* Firefox */
+    -moz-transform: rotate(45deg);
+
+    /* IE */
+    -ms-transform: rotate(45deg);
+
+    /* Opera */
+    -o-transform: rotate(45deg);
+    top: 11px;
+    left: 874px;
 }
 
 /*
