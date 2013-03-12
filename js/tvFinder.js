@@ -189,7 +189,6 @@
             $sizeSlider.slider("option", "topMin", topMin);
             $sizeSlider.slider("option", "lowMax", lowMax);
             // update messaging
-            $matchOfferCount.text($items.length);
             if ($items.length === 1) {
                 $matchOfferCount.text("1 match");
             }
